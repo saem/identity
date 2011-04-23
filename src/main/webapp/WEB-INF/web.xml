@@ -4,15 +4,15 @@
     xmlns:web="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
-  
-  <servlet>
-    <servlet-name>jane.identity.servlet</servlet-name>
-    <servlet-class>jane.identity.IdentityServlet</servlet-class>
-  </servlet>
 
-  <servlet-mapping>
-    <servlet-name>jane.identity.servlet</servlet-name>
+  <filter>
+    <filter-name>jane.identity</filter-name>
+    <filter-class>jane.identity.IdentityFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>jane.identity</filter-name>
     <url-pattern>/*</url-pattern>
-  </servlet-mapping>
+  </filter-mapping>
   
 </web-app>

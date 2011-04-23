@@ -6,7 +6,7 @@ class Identity(info: ProjectInfo) extends DefaultWebProject(info) {
 
   val json = "net.liftweb" %% "lift-json" % "2.2"
 
-  val servletApi = "org.mortbay.jetty" % "servlet-api" % "2.5-20081211" % "provided"
+  val servletApi = "org.mortbay.jetty" % "servlet-api" % "2.5-20081211" % "compile->default"
 
   // Alternatively, you could use scalatra-specs
   val scalatest = "org.scalatra" %% "scalatra-scalatest" % scalatraVersion % "test"
