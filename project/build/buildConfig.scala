@@ -1,6 +1,6 @@
 import sbt._
 
-class Identity(info: ProjectInfo) extends DefaultWebProject(info) {
+class Identity(info: ProjectInfo) extends DefaultWebProject(info) with IdeaProject {
   val scalatraVersion = "2.0.0.M3"
   val scalatra = "org.scalatra" %% "scalatra" % scalatraVersion
 

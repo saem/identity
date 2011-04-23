@@ -11,3 +11,10 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+
+#IDE specific
+.idea/
+identity.iml
+project/plugins/
+project/project.iml
+
