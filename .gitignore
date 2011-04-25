@@ -10,11 +10,13 @@ target/
 lib_managed/
 src_managed/
 project/boot/
-project/plugins/project/
+project/*/lib_managed/
+project/*/src_managed/
+project/*/target/
+project/plugins/project
 
 #IDE specific
 .idea/
 identity.iml
-project/plugins/
 project/project.iml
 
