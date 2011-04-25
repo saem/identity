@@ -41,8 +41,11 @@ class IdentityFilter extends ScalatraFilter with Configuration {
 
   post("/catalogues") {
     val catalogue = parse(request.body).extract[Catalogue]
-    catalogueRepository.save(catalogue)
-    redirect("/catalogues/" + catalogue.name)
+    catalogueRepository.findByName(catalogue.name) match {
+      case None => catalogueRepository.save(catalogue)
+                redirect("/catalogues/" + catalogue.name)
+      case _ => halt(409, "A catalogue with the same name already exists.")
+    }
   }
 
   get("/catalogues") {
@@ -70,6 +73,10 @@ class CatalogueRepository(dao: CatalogueDao) {
     dao.loadAll()
   }
 
+  def findByName(name: String): Option[Catalogue] = {
+    dao.load(name)
+  }
+
   def save(cat: Catalogue) {
     dao.save(cat)
   }
@@ -78,6 +85,7 @@ class CatalogueRepository(dao: CatalogueDao) {
 trait CatalogueDao {
   def loadAll(): Option[Seq[Catalogue]]
   def save(catalogue: Catalogue): Option[Catalogue]
+  def load(name: String): Option[Catalogue]
 
   protected def generateToken(catalogue: Catalogue) = {
     catalogue.name + System.nanoTime.toString
@@ -123,6 +131,11 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
     } else {
       None
     }
+  }
+
+  def load(name: String): Option[Catalogue] = {
+    val file = new File(dataDir, name)
+    if(file.exists) { Some(file2Catalogue(file)) } else None
   }
 }
 object CatalogueFileBackedDao {
