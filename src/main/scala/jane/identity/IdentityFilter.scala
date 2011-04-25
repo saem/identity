@@ -135,7 +135,7 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
 
   def load(name: String): Option[Catalogue] = {
     val file = new File(dataDir, name)
-    if(file.exists) { Some(file2Catalogue(file)) } else None
+    if(file.exists) { Some(file2Catalogueequal(file)) } else None
   }
 }
 object CatalogueFileBackedDao {
@@ -148,4 +148,3 @@ object CatalogueFileBackedDao {
     pretty(render(decompose(cat)))
   }
 }
-

@@ -17,15 +17,6 @@ package jane.identity
 
 import java.io.{FileWriter, File}
 
-/**
- * Created by IntelliJ IDEA.
- * User: gary
- * Date: 4/22/11
- * Time: 11:37 PM
- * To change this template use File | Settings | File Templates.
- */
-
-//TODO: Separate this out and write some tests
 class FilePlus(val file : File) {
   def write(text : String) {
     val fw = new FileWriter(file)
