@@ -65,8 +65,9 @@ trait Configuration {
 }
 
 case class BasicInfo(val who_am_i: String)
-
 case class Catalogue(name: String, token: Option[String])
+case class Realm(name: String, catalogue: Option[Catalogue])
+case class Principal(name: String, token: Option[String], realm: Realm)
 
 class CatalogueRepository(dao: CatalogueDao) {
   def findAll(): Option[Seq[Catalogue]] = {
@@ -135,7 +136,7 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
 
   def load(name: String): Option[Catalogue] = {
     val file = new File(dataDir, name)
-    if(file.exists) { Some(file2Catalogueequal(file)) } else None
+    if(file.exists) { Some(file2Catalogue(file)) } else None
   }
 }
 object CatalogueFileBackedDao {
