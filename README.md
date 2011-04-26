@@ -84,4 +84,4 @@ You should have received a copy of the GNU General Public License along with Ide
 
 ## Recommended
 
-If you're ever working on an git+SBT project, such as this, use the following SBT processor: [https://github.com/paulp/git-sbt-processor]
+If you're ever working on an git+SBT project, such as this, use the following SBT processor: [https://github.com/paulp/git-sbt-processor]. It's not without its warts, as you can't commit through the SBT shell just yet, hopefully I'll get around to patching that.
