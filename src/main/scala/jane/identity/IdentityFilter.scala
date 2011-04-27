@@ -17,11 +17,9 @@ package jane.identity
 
 import net.liftweb.json._
 import net.liftweb.json.Extraction._
+import net.liftweb.json.JsonParser._
 import net.liftweb.json.JsonDSL._
 import net.liftweb.json.JsonAST._
-import net.liftweb.json.JsonParser._
-
-import java.io._
 
 import org.scalatra.ScalatraFilter
 
@@ -40,11 +38,18 @@ class IdentityFilter extends ScalatraFilter with Configuration {
   }
 
   post("/catalogues") {
+    def writeCatalogue(catalogue: Catalogue) {
+      catalogueRepository.save(catalogue)
+      redirect("/catalogues/" + catalogue.name)
+    }
     val catalogue = parse(request.body).extract[Catalogue]
     catalogueRepository.findByName(catalogue.name) match {
-      case None => catalogueRepository.save(catalogue)
-                redirect("/catalogues/" + catalogue.name)
-      case _ => halt(409, "A catalogue with the same name already exists.")
+      case None => writeCatalogue(catalogue)
+      case _ => if(params.getOrElse("overwrite", "false").toLowerCase == "true") {
+                  writeCatalogue(catalogue)
+                } else {
+                  halt(409, "A catalogue with the same name already exists.")
+                }
     }
   }
 
@@ -56,6 +61,8 @@ class IdentityFilter extends ScalatraFilter with Configuration {
     }
   }
 }
+
+import java.io._
 
 trait Configuration {
   self : ScalatraFilter =>

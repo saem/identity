@@ -14,7 +14,15 @@
  */
 
 package jane.identity
- 
+
+import net.liftweb.json._
+import net.liftweb.json.Extraction._
+import net.liftweb.json.JsonParser._
+import net.liftweb.json.JsonDSL._
+import net.liftweb.json.JsonAST._
+
+import java.io._
+
 class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
   //implicit conversions
   import FilePlus._

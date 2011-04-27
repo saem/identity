@@ -55,10 +55,18 @@ class IdentityFilterSuite extends WordSpec with ScalatraSuite with ShouldMatcher
         }
       }
 
-      "writing a new catalogue where one already exists throws a 409 Conflict error" in {
-        post("/catalogues", body = "{ \"name\" : \"newCatalogue\" }") {
-          status should equal (409)
-          body should include ("A catalogue with the same name already exists.")
+      "writing a new catalogue where one already exists" should {
+        "throws a 409 Conflict error" in {
+          post("/catalogues", body = "{ \"name\" : \"newCatalogue\" }") {
+            status should equal (409)
+            body should include ("A catalogue with the same name already exists.")
+          }
+        }
+        "unless you pass in the overwrite parameter as true" in {
+          post("/catalogues?overwrite=true", body = "{ \"name\" : \"newCatalogue\" }") {
+            status should equal (302)
+            header("Location") should endWith ("/catalogues/newCatalogue")
+          }
         }
       }
 
