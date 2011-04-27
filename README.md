@@ -23,6 +23,8 @@ Of course, there are some sane POST/PUT/DELETEs that need to be thrown in, and t
     {
       "name":"catalogue.name",
       "token":"a SHA-1 of the name"
+      "metadata": {
+      }
     }
 
 ## Realm
@@ -31,21 +33,32 @@ Of course, there are some sane POST/PUT/DELETEs that need to be thrown in, and t
       "catalogue":{
         "catalogue":"some.catalogue", 
         "token":"a SHA-1 of the name"
-      } 
+        "metadata": {
+        }
+      }
     }
 
 ## Principal
     {
       "principal":"my name",
       "token":"a SHA-1 of the other values",
-      {
+      "realm": {
         "name":"my.realm",
         "catalogue":{
           "catalogue":"some.catalogue",
           "token":"a SHA-1 of the name"
-        } 
+          "metadata": {
+          }
+        }
+      }
+      "metadata": {
       }
     }
+
+## Metadata
+    {
+      //hash of metadata, use dot notation to namespace and not overwrite things. At the very least 'service.key'
+    } 
 
 ## Open Questions
 
