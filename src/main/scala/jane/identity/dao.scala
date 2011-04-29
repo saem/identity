@@ -51,7 +51,7 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
   def save(catalogue: Catalogue): Option[Catalogue] = {
     val tmpFile = new File(tempDir, catalogue.name)
     val finalFile = new File(dataDir, catalogue.name) //Relying on the FS providing atomic moves
-    if(!tmpFile.exists && !finalFile.exists) {
+    if(!tmpFile.exists) {
       val cat = catalogue.token match {
         case None => Catalogue(catalogue.name, Option(generateToken(catalogue)))
         case _ => catalogue
@@ -65,8 +65,22 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
   }
 
   def load(name: String): Option[Catalogue] = {
+    if(exists(name)) {
+      val file = new File(dataDir, name)
+      Some(file2Catalogue(file))
+    } else {
+      None
+    }
+  }
+
+  def exists(name: String) = {
     val file = new File(dataDir, name)
-    if(file.exists) { Some(file2Catalogue(file)) } else None
+    file.exists
+  }
+
+  def deleteByName(name: String) {
+    val file: FilePlus = new File(dataDir, name)
+    file.deleteAll
   }
 }
 object CatalogueFileBackedDao {

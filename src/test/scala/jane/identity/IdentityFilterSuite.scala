@@ -31,7 +31,7 @@ class IdentityFilterSuite extends WordSpec with ScalatraSuite with ShouldMatcher
     }
 
     "provide management for catalogues such as" when {
-      val cleanDir = new DirectoryPlus(new File("/tmp/identityServer"))
+      val cleanDir = new FilePlus(new File("/tmp/identityServer"))
       cleanDir.deleteAll
 
       "reading, /catalogues when there are none, should indicated a 204" in {
@@ -62,11 +62,37 @@ class IdentityFilterSuite extends WordSpec with ScalatraSuite with ShouldMatcher
             body should include ("A catalogue with the same name already exists.")
           }
         }
+        //TODO: Update this test to test against metadata once that's supported
         "unless you pass in the overwrite parameter as true" in {
           post("/catalogues?overwrite=true", body = "{ \"name\" : \"newCatalogue\" }") {
             status should equal (302)
             header("Location") should endWith ("/catalogues/newCatalogue")
           }
+        }
+      }
+
+      "updating an existing catalogue" should {
+        "return 200" in {
+          put("/catalogues/newCatalogue", body = "{\"name\":\"aCatalogue\"}") {
+            body should startWith ("{\n  \"name\":\"newCatalogue\",\n  \"token\":\"newCatalogue")
+            status should equal (200)
+          }
+        }
+        "otherwise, create a new one and return 201" in {
+          put("/catalogues/aCatalogue", body = "{\"name\":\"aCatalogue\"}") {
+            status should equal (201)
+            body should startWith ("{\n  \"name\":\"aCatalogue\",\n  \"token\":\"aCatalogue")
+          }
+        }
+      }
+
+      "delete a catalogue return 204 no content" in {
+        delete("/catalogues/newCatalogue") {
+          status should equal (204)
+          body should equal ("")
+        }
+        get("/catalogues/newCatalogue") {
+          status should equal (404)
         }
       }
 

@@ -26,17 +26,25 @@ class FilePlus(val file : File) {
   def readLines() = {
     io.Source.fromFile(file).mkString
   }
-}
-class DirectoryPlus(dir: File) {
+
   def deleteAll() {
     def deleteFile(dirToDelete : File) : Unit = {
       if(dirToDelete.isDirectory) {
         val listing = dirToDelete.listFiles
-        if(listing != null) { listing.foreach{ dir => deleteFile(dir) } }
+        if(listing != null) { listing.foreach{ file => deleteFile(file) } }
       }
       dirToDelete.delete
     }
-    deleteFile(dir)
+    deleteFile(file)
+  }
+
+  //Test it, and move deleteAll over to it
+  def recurse(dir: File)(f: File => Unit) {
+    if(dir.isDirectory) {
+      val listing = dir.listFiles
+      if(listing != null) { listing.foreach{ dir => f(dir) } }
+    }
+    f(dir)
   }
 }
 

@@ -34,15 +34,15 @@ class IdentityFilter extends ScalatraFilter with Configuration {
   }
 
   get("/") {
-    pretty(render(decompose(BasicInfo("I'm Rick James, BITCH!"))))
+    jsonify(BasicInfo("I'm Rick James, BITCH!"))
   }
 
   post("/catalogues") {
+    val catalogue = parse(request.body).extract[Catalogue]
     def writeCatalogue(catalogue: Catalogue) {
       catalogueRepository.save(catalogue)
       redirect("/catalogues/" + catalogue.name)
     }
-    val catalogue = parse(request.body).extract[Catalogue]
     catalogueRepository.findByName(catalogue.name) match {
       case None => writeCatalogue(catalogue)
       case _ => if(params.getOrElse("overwrite", "false").toLowerCase == "true") {
@@ -59,6 +59,30 @@ class IdentityFilter extends ScalatraFilter with Configuration {
       case None => halt(204)
       case c: Some[Seq[Catalogue]] => if(!c.isEmpty) { pretty(render(decompose(c))) } else { halt(204) }
     }
+  }
+
+  put("/catalogues/:catalogue") {
+    //I should probably do this through a map or some such
+    val userInputCatalogue = parse(request.body).extract[Catalogue]
+    val existed = catalogueRepository.exists(params("catalogue"))
+    val catalogue = catalogueRepository.save(Catalogue(params("catalogue"), None))
+    
+    catalogue match {
+      case cat: Some[Catalogue] => if(!existed) {
+                                     response.setStatus(201)
+                                   }
+                                   jsonify(cat.get)
+      case _ => halt(500)
+    }
+  }
+
+  delete("/catalogues/:catalogue") {
+    catalogueRepository.delete(params("catalogue"))
+    response.setStatus(204)
+  }
+
+  protected def jsonify(m: Model): String = {
+    pretty(render(decompose(m)))
   }
 }
 

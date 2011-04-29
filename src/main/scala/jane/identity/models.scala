@@ -15,11 +15,13 @@
 
 package jane.identity
 
-case class BasicInfo(val who_am_i: String)
-case class Catalogue(name: String, token: Option[String])
-case class Realm(name: String, catalogue: Option[Catalogue])
-case class Principal(name: String, token: Option[String], realm: Realm)
+abstract class Model
+case class BasicInfo(val who_am_i: String) extends Model
+case class Catalogue(name: String, token: Option[String]) extends Model
+case class Realm(name: String, catalogue: Option[Catalogue]) extends Model
+case class Principal(name: String, token: Option[String], realm: Realm) extends Model
 
+//Do I really need a repository and a DAO abstraction?
 class CatalogueRepository(dao: CatalogueDao) {
   def findAll(): Option[Seq[Catalogue]] = {
     dao.loadAll()
@@ -29,8 +31,16 @@ class CatalogueRepository(dao: CatalogueDao) {
     dao.load(name)
   }
 
-  def save(cat: Catalogue) {
+  def save(cat: Catalogue) = {
     dao.save(cat)
+  }
+
+  def exists(name: String) = {
+    dao.exists(name)
+  }
+
+  def delete(name: String) = {
+    dao.deleteByName(name)
   }
 }
 
@@ -38,6 +48,8 @@ trait CatalogueDao {
   def loadAll(): Option[Seq[Catalogue]]
   def save(catalogue: Catalogue): Option[Catalogue]
   def load(name: String): Option[Catalogue]
+  def exists(name: String): Boolean
+  def deleteByName(name: String): Unit
 
   protected def generateToken(catalogue: Catalogue) = {
     catalogue.name + System.nanoTime.toString
