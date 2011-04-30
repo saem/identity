@@ -20,4 +20,6 @@ class Identity(info: ProjectInfo) extends DefaultWebProject(info) with IdeaProje
   val sonatypeNexusSnapshots = "Sonatype Nexus Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   // For Scalate
   val fuseSourceSnapshots = "FuseSource Snapshot Repository" at "http://repo.fusesource.com/nexus/content/repositories/snapshots"
+
+  override def testCompileOptions = super.compileOptions ++ compileOptions("-unchecked")
 }

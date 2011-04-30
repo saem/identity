@@ -57,16 +57,14 @@ class IdentityFilter extends ScalatraFilter with Configuration {
     val catalogues = catalogueRepository.findAll()
     catalogues match {
       case None => halt(204)
-      case c: Some[Seq[Catalogue]] => if(!c.isEmpty) { pretty(render(decompose(c))) } else { halt(204) }
+      case c: Some[Seq[Catalogue]] => if(!c.isEmpty) { jsonify(c) } else { halt(204) }
     }
   }
 
   put("/catalogues/:catalogue") {
     //I should probably do this through a map or some such
-    val userInputCatalogue = parse(request.body).extract[Catalogue]
     val existed = catalogueRepository.exists(params("catalogue"))
-    val catalogue = catalogueRepository.save(Catalogue(params("catalogue"), None))
-    
+    val catalogue = catalogueRepository.save(Catalogue(params("catalogue")))
     catalogue match {
       case cat: Some[Catalogue] => if(!existed) {
                                      response.setStatus(201)
@@ -81,8 +79,8 @@ class IdentityFilter extends ScalatraFilter with Configuration {
     response.setStatus(204)
   }
 
-  protected def jsonify(m: Model): String = {
-    pretty(render(decompose(m)))
+  protected def jsonify(a: Any): String = {
+    pretty(render(decompose(a)))
   }
 }
 

@@ -22,7 +22,6 @@ Of course, there are some sane POST/PUT/DELETEs that need to be thrown in, and t
 ## Catalogue
     {
       "name":"catalogue.name",
-      "token":"a SHA-1 of the name"
       "metadata": {
       }
     }
@@ -32,7 +31,6 @@ Of course, there are some sane POST/PUT/DELETEs that need to be thrown in, and t
       "name":"my.realm",
       "catalogue":{
         "catalogue":"some.catalogue", 
-        "token":"a SHA-1 of the name"
         "metadata": {
         }
       }
@@ -46,7 +44,6 @@ Of course, there are some sane POST/PUT/DELETEs that need to be thrown in, and t
         "name":"my.realm",
         "catalogue":{
           "catalogue":"some.catalogue",
-          "token":"a SHA-1 of the name"
           "metadata": {
           }
         }

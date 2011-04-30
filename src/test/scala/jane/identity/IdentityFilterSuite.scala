@@ -51,7 +51,7 @@ class IdentityFilterSuite extends WordSpec with ScalatraSuite with ShouldMatcher
         get("/catalogues") {
           status should equal (200)
           header("Content-Type") should startWith ("application/json")
-          body should startWith ("[{\n  \"name\":\"newCatalogue\",\n  \"token\":\"newCatalogue")
+          body should startWith ("[{\n  \"name\":\"newCatalogue\"")
         }
       }
 
@@ -74,14 +74,14 @@ class IdentityFilterSuite extends WordSpec with ScalatraSuite with ShouldMatcher
       "updating an existing catalogue" should {
         "return 200" in {
           put("/catalogues/newCatalogue", body = "{\"name\":\"aCatalogue\"}") {
-            body should startWith ("{\n  \"name\":\"newCatalogue\",\n  \"token\":\"newCatalogue")
+            body should startWith ("{\n  \"name\":\"newCatalogue\"")
             status should equal (200)
           }
         }
         "otherwise, create a new one and return 201" in {
           put("/catalogues/aCatalogue", body = "{\"name\":\"aCatalogue\"}") {
             status should equal (201)
-            body should startWith ("{\n  \"name\":\"aCatalogue\",\n  \"token\":\"aCatalogue")
+            body should startWith ("{\n  \"name\":\"aCatalogue\"")
           }
         }
       }

@@ -52,13 +52,9 @@ class CatalogueFileBackedDao(val dataDir: FilePlus) extends CatalogueDao {
     val tmpFile = new File(tempDir, catalogue.name)
     val finalFile = new File(dataDir, catalogue.name) //Relying on the FS providing atomic moves
     if(!tmpFile.exists) {
-      val cat = catalogue.token match {
-        case None => Catalogue(catalogue.name, Option(generateToken(catalogue)))
-        case _ => catalogue
-      }
-      tmpFile.write(cat)
+      tmpFile.write(catalogue)
       tmpFile.renameTo(finalFile)
-      Some(cat)
+      Some(catalogue)
     } else {
       None
     }
